@@ -1,0 +1,33 @@
+#https://github.com/willgrz/plesk-nginx-reverse
+sver="0.9b2/initial"
+
+This tool creates nginx reverse proxy configs based on nginx vhost configs, both with and without SSL - it was designed primarily for Plesk but should work on anything nginx based.
+It keeps SSL certificates updated (ideal for letsencrypt) and will only update the vhost config if any changes happened (should be very rare, proxy config only changes if SSL or listener domain changes).
+
+Usage:
+- Clone repo
+- Edit gen.sh and adapt config
+- If desired run as "./gen.sh init 10.250.1.1" to auto install/config nginx (no warranty)
+- Run normal as "./gen.sh" to build configs and sync
+
+Features:
+- Automatic setup of proxy servers based on Debian/Ubuntu (install nginx and configures plus syncs initial all existing configs/certificates)
+- HTTP2/Websocket enabled (eg. required to proxy NoVNC in KVM etc. panels)
+- Detection for SSL and non SSL vhosts with separated server blocks on reverse (HTTP->HTTP backend, HTTPS->HTTPS backend)
+- Allows to force SSL to backend for HTTP connections (disabled by default, breaks some CMS)
+- Can be ran as cron to update SSL certificates and resync to all nodes & reload nginx (no restart/entirely live)
+- Verifies nginx config is working (nginx -t) on each remote system before reload
+- Supports multiple nodes and only requires ssh & rsync access to them
+- Syslog style logging with decent error reporting
+
+
+Known issues:
+- Currently not removing any domains if removed from nginx, TBD
+- Init function requires Debian 8/Ubuntu 16 as the nginx requires HTTP2 support (to resolve this/use on older change the template.conf* files)
+
+Beware:
+- Expects nginx config files as "$domain.conf", eg. "william.co.il.conf"
+
+Planned:
+- Install nginx from source & adapt to CentOS there also (replace apt entirely, makes no sense, nginx with only reverse is very lightweight)
+- Removal on remote systems on deletion from nginx vhost directory (eg. Plesk deleted, will use rsync again to keep sync/delete)
