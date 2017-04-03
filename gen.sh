@@ -113,7 +113,7 @@ for conf in $(ls ${confdir}/*.conf); do
 		if [ "$sslc" == "1" ]; then
 			sed -i "s+SSLCLIENT+${targetdir}/ssl/${domain}.client+g" conf/${domain}.conf.tmp
 			sed -i "s/#ssl_client_certificate/ssl_client_certificate/" conf/${domain}.conf.tmp
-			sed -i "s+SSLBACKEND+${backendssl}+g" conf/${domain}.conf.tmp
+			sed -i "s+SSLB-ACKEND+${backendssl}+g" conf/${domain}.conf.tmp
 		fi
 	fi
 	sed -i "s/SRVNAME/${srvname}/g" conf/${domain}.conf.tmp
